@@ -115,13 +115,18 @@ def _collect_tool_calls(
 ) -> None:
     r"""Collect valid tool call dictionaries from parsed payloads.
 
-    Walks dicts and lists recursively, appending every dict that has a
-    non-null ``tool_name`` key to ``accumulator``.
+    Appends ``payload`` when it is a dict with a non-null ``tool_name``;
+    for lists, recurses into each item. Dicts without ``tool_name`` and
+    their values are not traversed.
 
     Args:
         payload (Any): A parsed JSON-like value to inspect.
         accumulator (List[Dict[str, Any]]): The list that collected tool
             calls are appended to.
+
+    Returns:
+        None: Collected tool calls are appended to ``accumulator`` in
+            place.
     """
 
     if isinstance(payload, dict):
